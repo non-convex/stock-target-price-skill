@@ -1,5 +1,7 @@
 # Stock Target Price Skill for Claude Code
 
+[中文文档](README_CN.md)
+
 A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill that performs systematic, auditable stock valuation analysis. It builds an operational fact base from primary sources, standardizes earnings and cash flows, identifies key value drivers, selects appropriate valuation methods, and stress-tests conclusions through scenario analysis, sensitivity testing, and falsification frameworks.
 
 ## What It Does
@@ -42,7 +44,7 @@ The skill includes tailored analytical frameworks for:
 
 ```bash
 # Clone this repo
-git clone https://github.com/<your-username>/stock-target-price-skill.git
+git clone https://github.com/non-convex/stock-target-price-skill.git
 
 # Create a symlink in your Claude Code skills directory
 # macOS / Linux:
