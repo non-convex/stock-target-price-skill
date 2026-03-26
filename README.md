@@ -42,10 +42,10 @@ The skill includes tailored analytical frameworks for:
 
 ### Quick install (recommended)
 
-If your AI agent supports installing skills via GitHub URL (e.g., Claude Code, OpenClaw), simply provide:
+If your AI agent supports installing skills (e.g., Claude Code, OpenClaw), just tell it:
 
 ```
-https://github.com/non-convex/stock-target-price-skill
+Install the stock valuation skill from https://github.com/non-convex/stock-target-price-skill
 ```
 
 The agent will automatically download and configure the skill.

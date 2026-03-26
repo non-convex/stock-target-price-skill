@@ -40,10 +40,10 @@
 
 ### 快速安装（推荐）
 
-如果你的 AI Agent 支持通过 GitHub 链接安装技能（如 Claude Code、OpenClaw 等），直接提供：
+如果你的 AI Agent 支持安装技能（如 Claude Code、OpenClaw 等），直接告诉它：
 
 ```
-https://github.com/non-convex/stock-target-price-skill
+帮我安装这个股票估值技能 https://github.com/non-convex/stock-target-price-skill
 ```
 
 Agent 会自动下载并配置该技能。
