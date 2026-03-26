@@ -109,7 +109,6 @@ You can modify `SKILL.md` to:
 
 - An AI agent with web search capability (for fetching financial data)
 - A large-context LLM (128K+ tokens recommended for comprehensive analysis)
-- Works best with Claude Opus / Sonnet, GPT-4o, Gemini Pro, or equivalent models
 
 ## Disclaimer
 
