@@ -38,20 +38,27 @@
 
 ## 安装方法
 
-### 在 Claude Code 中使用
+### 快速安装（推荐）
+
+如果你的 AI Agent 支持通过 GitHub 链接安装技能（如 Claude Code、OpenClaw 等），直接提供：
+
+```
+https://github.com/non-convex/stock-target-price-skill
+```
+
+Agent 会自动下载并配置该技能。
+
+### 手动安装
 
 ```bash
-# 克隆仓库
 git clone https://github.com/non-convex/stock-target-price-skill.git
 
-# 创建技能目录并复制
+# 以 Claude Code 为例：
 mkdir -p ~/.claude/skills/stock_target_price
 cp stock-target-price-skill/SKILL.md ~/.claude/skills/stock_target_price/SKILL.md
 ```
 
-安装后重启 Claude Code 即可使用。
-
-### 在其他 AI Agent 中使用
+### 作为独立提示词使用
 
 本项目的核心是 `SKILL.md` — 一个自包含的提示词，可以输入给任何具备联网搜索能力的 LLM 或 AI Agent。你可以：
 

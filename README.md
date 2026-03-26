@@ -40,20 +40,27 @@ The skill includes tailored analytical frameworks for:
 
 ## Installation
 
-### Use with Claude Code
+### Quick install (recommended)
+
+If your AI agent supports installing skills via GitHub URL (e.g., Claude Code, OpenClaw), simply provide:
+
+```
+https://github.com/non-convex/stock-target-price-skill
+```
+
+The agent will automatically download and configure the skill.
+
+### Manual install
 
 ```bash
-# Clone this repo
 git clone https://github.com/non-convex/stock-target-price-skill.git
 
-# Create the skill directory and copy
+# For Claude Code:
 mkdir -p ~/.claude/skills/stock_target_price
 cp stock-target-price-skill/SKILL.md ~/.claude/skills/stock_target_price/SKILL.md
 ```
 
-After installing, restart Claude Code. Then simply ask:
-
-### Use with other AI agents
+### Use as a standalone prompt
 
 The core of this project is `SKILL.md` — a self-contained prompt that can be fed into any LLM or AI agent capable of web search. You can:
 
