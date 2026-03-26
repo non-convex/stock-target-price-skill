@@ -1,12 +1,12 @@
-# Stock Target Price Skill for Claude Code
+# Stock Target Price Skill
 
 [中文文档](README_CN.md)
 
-A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill that performs systematic, auditable stock valuation analysis. It builds an operational fact base from primary sources, standardizes earnings and cash flows, identifies key value drivers, selects appropriate valuation methods, and stress-tests conclusions through scenario analysis, sensitivity testing, and falsification frameworks.
+A structured prompt framework for AI agents to perform systematic, auditable stock valuation analysis. It builds an operational fact base from primary sources, standardizes earnings and cash flows, identifies key value drivers, selects appropriate valuation methods, and stress-tests conclusions through scenario analysis, sensitivity testing, and falsification frameworks.
 
 ## What It Does
 
-When triggered, this skill guides Claude through a rigorous **13-step valuation process**:
+When triggered, this skill guides the AI agent through a rigorous **13-step valuation process**:
 
 | Step | Description |
 |------|-------------|
@@ -40,36 +40,30 @@ The skill includes tailored analytical frameworks for:
 
 ## Installation
 
-### Option 1: Clone and symlink (recommended)
+### Use with Claude Code
 
 ```bash
 # Clone this repo
 git clone https://github.com/non-convex/stock-target-price-skill.git
 
-# Create a symlink in your Claude Code skills directory
-# macOS / Linux:
-ln -s "$(pwd)/stock-target-price-skill/SKILL.md" \
-      ~/.claude/skills/stock_target_price/SKILL.md
-
-# Windows (PowerShell as Admin):
-New-Item -ItemType SymbolicLink `
-  -Path "$env:USERPROFILE\.claude\skills\stock_target_price\SKILL.md" `
-  -Target "$(Get-Location)\stock-target-price-skill\SKILL.md"
-```
-
-### Option 2: Direct copy
-
-```bash
-# Create the skill directory
+# Create the skill directory and copy
 mkdir -p ~/.claude/skills/stock_target_price
-
-# Copy the skill file
-cp SKILL.md ~/.claude/skills/stock_target_price/SKILL.md
+cp stock-target-price-skill/SKILL.md ~/.claude/skills/stock_target_price/SKILL.md
 ```
 
-### Verify installation
+After installing, restart Claude Code. Then simply ask:
 
-After installing, restart Claude Code. You should see `stock_target_price` listed as an available skill. Then simply ask:
+### Use with other AI agents
+
+The core of this project is `SKILL.md` — a self-contained prompt that can be fed into any LLM or AI agent capable of web search. You can:
+
+1. **As a system prompt**: Paste the content of `SKILL.md` as a system prompt, then ask the agent to analyze a specific stock.
+2. **As a tool/skill**: Integrate into your agent framework (e.g., LangChain, AutoGPT, custom agents) as a callable prompt template.
+3. **As a reference**: Use the 13-step framework as a checklist for your own valuation workflow.
+
+### Verify it works
+
+Ask your AI agent:
 
 ```
 Give me a target price for AAPL
@@ -93,7 +87,7 @@ Analyze NVIDIA and give me a 12-month target price
 给出比亚迪股票2026年的目标价
 ```
 
-The skill will automatically search for financial data, build an earnings model, and produce a structured valuation with bull/base/bear scenarios.
+The agent will automatically search for financial data, build an earnings model, and produce a structured valuation with bull/base/bear scenarios.
 
 ## Output Format
 
@@ -113,9 +107,9 @@ You can modify `SKILL.md` to:
 
 ## Requirements
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI, desktop app, or IDE extension
-- Web search capability enabled (for fetching financial data)
-- A Claude model with sufficient context (Opus 4.6 recommended for comprehensive analysis)
+- An AI agent with web search capability (for fetching financial data)
+- A large-context LLM (128K+ tokens recommended for comprehensive analysis)
+- Works best with Claude Opus / Sonnet, GPT-4o, Gemini Pro, or equivalent models
 
 ## Disclaimer
 

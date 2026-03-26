@@ -1,10 +1,10 @@
-# Stock Target Price Skill — Claude Code 股票估值分析技能
+# Stock Target Price Skill — AI Agent 股票估值分析技能
 
-一个用于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的股票估值分析技能。基于第一手材料搭建经营事实底座，完成标准化盈利与现金流处理，识别关键价值驱动因素，选择匹配的估值方法，并通过情景分析、敏感性测试与反证框架校验结论。
+一个面向 AI Agent 的结构化股票估值提示词框架。基于第一手材料搭建经营事实底座，完成标准化盈利与现金流处理，识别关键价值驱动因素，选择匹配的估值方法，并通过情景分析、敏感性测试与反证框架校验结论。
 
 ## 功能概述
 
-触发后，该技能会引导 Claude 完成一套严谨的 **13 步估值流程**：
+触发后，该技能会引导 AI Agent 完成一套严谨的 **13 步估值流程**：
 
 | 步骤 | 内容 |
 |------|------|
@@ -38,38 +38,30 @@
 
 ## 安装方法
 
-### 方式一：克隆并创建软链接（推荐）
+### 在 Claude Code 中使用
 
 ```bash
 # 克隆仓库
 git clone https://github.com/non-convex/stock-target-price-skill.git
 
-# 创建技能目录的软链接
-# macOS / Linux:
+# 创建技能目录并复制
 mkdir -p ~/.claude/skills/stock_target_price
-ln -s "$(pwd)/stock-target-price-skill/SKILL.md" \
-      ~/.claude/skills/stock_target_price/SKILL.md
-
-# Windows (以管理员身份运行 PowerShell):
-mkdir "$env:USERPROFILE\.claude\skills\stock_target_price" -Force
-New-Item -ItemType SymbolicLink `
-  -Path "$env:USERPROFILE\.claude\skills\stock_target_price\SKILL.md" `
-  -Target "$(Get-Location)\stock-target-price-skill\SKILL.md"
+cp stock-target-price-skill/SKILL.md ~/.claude/skills/stock_target_price/SKILL.md
 ```
 
-### 方式二：直接复制
+安装后重启 Claude Code 即可使用。
 
-```bash
-# 创建技能目录
-mkdir -p ~/.claude/skills/stock_target_price
+### 在其他 AI Agent 中使用
 
-# 复制技能文件
-cp SKILL.md ~/.claude/skills/stock_target_price/SKILL.md
-```
+本项目的核心是 `SKILL.md` — 一个自包含的提示词，可以输入给任何具备联网搜索能力的 LLM 或 AI Agent。你可以：
+
+1. **作为系统提示词**：将 `SKILL.md` 的内容粘贴为系统提示词，然后让 Agent 分析特定股票。
+2. **作为工具/技能**：集成到你的 Agent 框架中（如 LangChain、AutoGPT、自定义 Agent），作为可调用的提示词模板。
+3. **作为参考框架**：将 13 步流程作为你自己估值工作的检查清单。
 
 ### 验证安装
 
-安装后重启 Claude Code，你应该能在可用技能列表中看到 `stock_target_price`。然后直接输入：
+让你的 AI Agent 执行：
 
 ```
 给出比亚迪股票2026年的目标价
@@ -95,7 +87,7 @@ cp SKILL.md ~/.claude/skills/stock_target_price/SKILL.md
 Analyze AAPL and give me a 12-month target price
 ```
 
-该技能会自动搜索财务数据、构建盈利模型，并输出包含乐观/基准/悲观三种情景的结构化估值分析。
+AI Agent 会自动搜索财务数据、构建盈利模型，并输出包含乐观/基准/悲观三种情景的结构化估值分析。
 
 ## 输出格式
 
@@ -115,9 +107,9 @@ Analyze AAPL and give me a 12-month target price
 
 ## 环境要求
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI、桌面应用或 IDE 插件
-- 启用网页搜索功能（用于获取财务数据）
-- 建议使用大上下文模型（推荐 Opus 4.6 以获得最佳分析效果）
+- 具备联网搜索能力的 AI Agent（用于获取财务数据）
+- 大上下文 LLM（建议 128K+ tokens 以获得完整分析）
+- 推荐模型：Claude Opus / Sonnet、GPT-4o、Gemini Pro 或同等水平模型
 
 ## 免责声明
 
