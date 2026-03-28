@@ -2,41 +2,54 @@
 
 [中文文档](README_CN.md)
 
-A structured prompt framework for AI agents to perform systematic, auditable stock valuation analysis. It builds an operational fact base from primary sources, standardizes earnings and cash flows, identifies key value drivers, selects appropriate valuation methods, and stress-tests conclusions through scenario analysis, sensitivity testing, and falsification frameworks.
+A structured prompt framework for AI agents to perform systematic, auditable stock valuation analysis — with a conditionally activated macro overlay. It builds an operational fact base from primary sources, determines whether macro-level reasoning is needed, standardizes earnings and cash flows, identifies key value drivers, selects appropriate valuation methods, and stress-tests conclusions through scenario analysis, sensitivity testing, and falsification frameworks.
 
 ## What It Does
 
-When triggered, this skill guides the AI agent through a rigorous **13-step valuation process**:
+When triggered, this skill guides the AI agent through a rigorous **13-step valuation process** with an optional **macro-enhanced module (M1–M4)** that activates when exogenous variables significantly drive company value:
+
+### Core Analysis Flow
 
 | Step | Description |
 |------|-------------|
-| 0 | Define the valuation subject and accounting scope |
+| 0 | Define the valuation subject, accounting scope, and macro exposure |
 | 1 | Build a historical operational fact base (P&L, balance sheet, cash flow) |
-| 2 | Standardize earnings and cash flows (strip out one-offs) |
-| 3 | Understand the business model, industry structure, and value chain position |
-| 4 | Lock in 1-3 core variables that truly drive value |
-| 5 | Build a "by-segment + by-driver" forecast framework |
-| 6 | Validate forecasts against capital efficiency and cash flow quality |
+| 2 | Standardize earnings and cash flows (strip out one-offs and macro distortions) |
+| 3 | Understand the business model, industry structure, management, and macro transmission |
+| 4 | Lock in 1–3 core variables that truly drive value (including exogenous variables if applicable) |
+| 5 | Build a "by-segment + by-driver + by-scenario" forecast framework |
+| 6 | Validate forecasts against capital efficiency, cash flow quality, and balance sheet resilience |
 | 7 | Select valuation methods that match the business model |
-| 8 | Determine valuation parameters based on quality, cycle, and implied expectations |
+| 8 | Determine valuation parameters based on quality, cycle, risk premium, and implied expectations |
 | 9 | Bridge enterprise value to equity value per share |
-| 10 | Run 3-scenario analysis and key variable sensitivity |
-| 11 | Reverse-engineer implied expectations and run falsification checks |
-| 12 | Converge into an explainable valuation conclusion |
+| 10 | Run 3-scenario analysis (macro path x company execution matrix) and sensitivity testing |
+| 11 | Reverse-engineer implied expectations, decompose market pricing, and run falsification checks |
+| 12 | Converge into an explainable, trackable, and updatable valuation conclusion |
 
-The output starts with a **valuation conclusion summary** (target price, scenarios, key assumptions) upfront, followed by the full analytical walkthrough.
+### Macro-Enhanced Module (conditionally activated)
+
+The macro module activates when the company's value is significantly driven by rates, FX, commodities, tariffs, geopolitics, or other exogenous variables:
+
+| Step | Description |
+|------|-------------|
+| M1 | Define the current macro regime using 3–6 key exogenous variables |
+| M2 | Construct Bear / Base / Bull macro scenario paths |
+| M3 | Map each macro variable to specific company-level transmission channels |
+| M4 | Define a monitoring dashboard with leading indicators and invalidation conditions |
+
+The output starts with a **valuation conclusion summary** (target price, scenarios, key assumptions, macro path) upfront, followed by the full analytical walkthrough.
 
 ## Industry Coverage
 
 The skill includes tailored analytical frameworks for:
 
-- **Manufacturing / Auto Parts / Industrials** - volume, ASP, utilization, capex
-- **Consumer** - same-store, channel expansion, pricing power, inventory
-- **Internet / Software / Platforms** - user growth, ARPU, SBC, operating leverage
-- **Semiconductors / Hardware** - ASP, yield, utilization, cycle position
-- **Banks / Insurance / Brokers** - ROE, asset quality, provisions, capital adequacy
-- **Cyclicals / Resources / Chemicals / Shipping** - price cycle, supply constraints, cost curves
-- **Pre-revenue Biotech / Deep Tech** - milestone probability, cash runway, event sensitivity
+- **Manufacturing / Auto Parts / Industrials** — volume, ASP, utilization, capex + macro: manufacturing investment, tariffs, FX, input costs
+- **Consumer** — same-store, channel expansion, pricing power, inventory + macro: income, employment, consumer confidence, wealth effects
+- **Internet / Software / Platforms** — user growth, ARPU, SBC, operating leverage + macro: ad budgets, IT spend, funding environment, real rates
+- **Semiconductors / Hardware** — ASP, yield, utilization, cycle position + macro: global electronics demand, AI capex, export controls
+- **Banks / Insurance / Brokers** — ROE, asset quality, provisions, capital adequacy + macro: yield curve, credit costs, regulatory direction
+- **Cyclicals / Resources / Chemicals / Shipping** — price cycle, supply constraints, cost curves + macro: global demand, energy, USD, trade policy
+- **Pre-revenue Biotech / Deep Tech** — milestone probability, cash runway, event sensitivity + macro: funding environment, rates, regulatory pace
 
 ## Installation
 
@@ -94,20 +107,21 @@ Analyze NVIDIA and give me a 12-month target price
 给出比亚迪股票2026年的目标价
 ```
 
-The agent will automatically search for financial data, build an earnings model, and produce a structured valuation with bull/base/bear scenarios.
+The agent will automatically search for financial data, build an earnings model, determine whether to activate the macro module based on the company's exposure, and produce a structured valuation with bull/base/bear scenarios.
 
 ## Output Format
 
 The analysis output follows this structure:
 
-1. **Valuation Conclusion** (upfront) - target price, 3 scenarios, key assumptions, upside/downside, catalysts & risks, disclaimer
-2. **Full Analysis** (13 steps) - complete derivation from fact base to final judgment
+1. **Valuation Conclusion** (upfront) — target price, 3 scenarios, optional probability-weighted target, key assumptions, macro path summary, upside/downside, catalysts & risks, tracking indicators, disclaimer
+2. **Full Analysis** (13 steps + M1–M4 if activated) — complete derivation from fact base to final judgment
 
 ## Customization
 
 You can modify `SKILL.md` to:
 
 - Adjust the valuation framework steps
+- Tune the macro module trigger conditions
 - Add or remove industry-specific rules
 - Change the output format template
 - Add additional error-prevention principles
