@@ -137,4 +137,4 @@ This skill produces analysis for educational and research purposes only. It does
 
 ## License
 
-[MIT](LICENSE)
+[CC BY-NC 4.0](LICENSE) — free for research and learning; commercial use is not permitted.
