@@ -6,23 +6,33 @@ A structured prompt framework for AI agents to perform systematic, auditable sto
 
 ## What It Does
 
-When triggered, this skill guides the AI agent through a rigorous **14-step valuation process** (0–12, plus an inserted 4.5) with an optional **macro-enhanced module (M1–M4)** that activates when exogenous variables significantly drive company value. Two cross-cutting mechanisms — **Research Waves** and **Reasoning Cards** — run through the entire flow to prevent linear extrapolation from history.
+When triggered, this skill guides the AI agent through a rigorous **13-step valuation process** (Steps 0–12) with an optional **macro-enhanced module (M1–M4)** that activates when exogenous variables significantly drive company value. Four cross-cutting mechanisms — **Adaptive Search Loop**, **Information Graph**, **Research Waves**, and **Reasoning Cards** — run through the entire flow to prevent linear extrapolation from history.
 
 ### Iterative Research Methodology
 
 The framework treats valuation as iterative reasoning, not a one-shot search followed by template filling.
 
-**Three Research Waves** — information is gathered in cycles, each with explicit goals and stopping conditions:
+**1. Adaptive Search Loop** — every information-gathering action (search, document read, data lookup) must complete a cycle, so no blind searching occurs:
+
+- **Before**: state the specific question, expected signals (confirming / disconfirming / surprising), and the position in the information graph
+- **After**: evaluate answer completeness, classify new content (fact / inference / assumption), capture surprises, update the graph
+- **Next-step decision** (mandatory, one of five): Advance / Dig deeper / Pivot / Rollback / Mark gap
+
+Two consecutive searches with no new information trigger a diagnostic pause — no idle loops.
+
+**2. Information Graph** — a live map with four layers (confirmed facts / active hypotheses / information gaps / unexpected findings). It drives every next-step decision and determines when each wave's stopping condition is met.
+
+**3. Three Research Waves** — information is gathered in cycles, each with explicit goals and stopping conditions:
 
 | Wave | Goal | Primary loci in the flow |
 |------|------|--------------------------|
-| **Wave 1 · Build** | Breadth-first fact base — business, financials, industry position, macro exposure | Steps 0–1 |
-| **Wave 2 · Focus** | Targeted deep-dive around each candidate core variable; converge to 1–3 real drivers | Step 4.5 |
-| **Wave 3 · Falsify** | Actively search for evidence that could break the base case | Before Step 11 |
+| **Wave 1 · Build** | Breadth-first fact base — business, financials, industry position, macro exposure | Steps 0–3 |
+| **Wave 2 · Focus** | Targeted deep-dive around each candidate core variable; converge to 1–3 real drivers | Step 4 |
+| **Wave 3 · Falsify** | Actively search for evidence that could break the base case | Between Steps 10 and 11 |
 
 If Wave 2/3 surfaces new key variables or invalidates locked ones, the analysis explicitly returns to Step 4 and records the rollback in the final report — no hidden fixes.
 
-**Reasoning Cards** — every key judgment (core variable selection, forecast driver, margin bridge, valuation parameter, scenario premise) is backed by a structured card:
+**4. Reasoning Cards** — key judgments are backed by structured cards (typically 5–7 per analysis, not more):
 
 ```
 Conclusion → Premise facts (source / timing / fact|inference|assumption)
@@ -32,7 +42,7 @@ Conclusion → Premise facts (source / timing / fact|inference|assumption)
          → Information gaps
 ```
 
-Cards are alive — Wave 2 evidence adjusts confidence, Wave 3 counter-evidence can trigger rollback.
+Cards are required at three nodes only: each core variable (Step 4), each key valuation parameter (Step 8), each scenario's assumption set (Step 10). Cards are alive — new evidence adjusts confidence; counter-evidence can trigger rollback.
 
 ### Core Analysis Flow
 
@@ -42,8 +52,7 @@ Cards are alive — Wave 2 evidence adjusts confidence, Wave 3 counter-evidence 
 | 1 | Build a historical operational fact base (P&L, balance sheet, cash flow) |
 | 2 | Standardize earnings and cash flows (strip out one-offs and macro distortions) |
 | 3 | Understand the business model, industry structure, management, and macro transmission |
-| 4 | Lock in 1–3 core variables that truly drive value (including exogenous variables if applicable) |
-| **4.5** | **Targeted deep-dive (Wave 2) around each core variable** — sub-questions, sources, leading indicators, update actions — before any forecasting |
+| 4 | **Lock in 1–3 core variables and perform targeted Wave 2 validation** (sub-questions, sources, leading indicators, update actions) before forecasting |
 | 5 | Build a "by-segment + by-driver + by-scenario" forecast framework |
 | 6 | Validate forecasts against capital efficiency, cash flow quality, and balance sheet resilience |
 | 7 | Select valuation methods that match the business model |
@@ -63,6 +72,8 @@ The macro module activates when the company's value is significantly driven by r
 | M2 | Construct Bear / Base / Bull macro scenario paths |
 | M3 | Map each macro variable to specific company-level transmission channels |
 | M4 | Define a monitoring dashboard with leading indicators and invalidation conditions |
+
+All macro-related additions to the main flow (e.g., stress testing at Step 6, parameter consistency at Step 8, implied-path check at Step 11) are **consolidated in a single table** inside the module, so the main flow reads cleanly as a macro-neutral narrative.
 
 The output starts with a **valuation conclusion summary** (target price, scenarios, key assumptions, macro path) upfront, followed by a narrative report in which each key judgment's premise, reasoning chain, and falsification conditions are made visible — not hidden behind conclusory phrases like "therefore" or "overall".
 
