@@ -109,15 +109,17 @@ git clone https://github.com/non-convex/stock-target-price-skill.git
 # For Claude Code:
 mkdir -p ~/.claude/skills/stock_target_price
 cp stock-target-price-skill/SKILL.md ~/.claude/skills/stock_target_price/SKILL.md
+cp -R stock-target-price-skill/references ~/.claude/skills/stock_target_price/references
 ```
 
 ### Use as a standalone prompt
 
-The core of this project is `SKILL.md` — a self-contained prompt that can be fed into any LLM or AI agent capable of web search. You can:
+The core of this project is now a **modular prompt**: `SKILL.md` is the entry point, and detailed guidance lives under `references/`. You can:
 
-1. **As a system prompt**: Paste the content of `SKILL.md` as a system prompt, then ask the agent to analyze a specific stock.
-2. **As a tool/skill**: Integrate into your agent framework (e.g., LangChain, AutoGPT, custom agents) as a callable prompt template.
-3. **As a reference**: Use the 13-step framework as a checklist for your own valuation workflow.
+1. **As a skill entrypoint**: Load `SKILL.md` first, then let the agent open the referenced files on demand.
+2. **As a system prompt**: If your environment cannot read local references, concatenate `SKILL.md` with `references/dynamic-research.md`, `references/core-workflow.md`, and `references/output-format.md`, then add `references/macro-module.md` / `references/industry-playbooks.md` only when relevant.
+3. **As a tool/skill**: Integrate the folder into your agent framework (e.g., LangChain, AutoGPT, custom agents) so the entry prompt can progressively load the detailed modules.
+4. **As a reference**: Use the 13-step framework plus the dynamic research loop as a checklist for your own valuation workflow.
 
 ### Verify it works
 
@@ -156,13 +158,14 @@ The analysis output follows this structure:
 
 ## Customization
 
-You can modify `SKILL.md` to:
+You can customize different layers of the skill independently:
 
-- Adjust the valuation framework steps
-- Tune the macro module trigger conditions
-- Add or remove industry-specific rules
-- Change the output format template
-- Add additional error-prevention principles
+- `SKILL.md` — orchestration, navigation, and high-priority control rules
+- `references/dynamic-research.md` — adaptive dynamic search, information graph, research waves, reasoning cards
+- `references/core-workflow.md` — valuation workflow steps
+- `references/macro-module.md` — macro trigger conditions and overlays
+- `references/industry-playbooks.md` — industry-specific heuristics
+- `references/output-format.md` — output template and error-prevention checklist
 
 ## Requirements
 
