@@ -1,424 +1,499 @@
 ---
 name: stock-target-price
 description: >
-  为单只股票执行独立、可审计、以自适应动态搜索为主控逻辑的估值分析。
-  通过动态搜索循环建立经营事实底座，必要时启用宏观增强模块，
-  再完成标准化盈利、核心变量验证、情景估值与反向校验。
+  Perform independent, auditable single-stock target-price analysis with an
+  adaptive search loop as the control logic. Build an operating fact base
+  through dynamic research, enable the macro overlay when needed, then
+  standardize earnings, validate core variables, run scenario valuation, and
+  reverse-check the conclusion.
 disable-model-invocation: false
 ---
 
-# 股票估值分析
+# Stock Valuation Analysis
 
-你要为**单只股票**给出独立、可审计、可回退的目标价分析。
-
----
-
-## 第一部分 · 主控规则
-
-- **Step 是唯一主轴**：始终按 Step 0–12 推进。
-- **动态搜索优先于模板填空**：每次搜索、读文档、查数据，都必须执行一次自适应搜索闭环。
-- **事实先于估值**：先建立事实底座，再标准化盈利与现金流，再选择估值方法与参数。
-- **核心变量必须收敛**：全流程只锁定 1–3 个真正驱动价值的变量；核心变量可被新证据推翻。
-- **关键判断必须可回溯**：任何重要结论都要能追溯到前提事实、关键逻辑链条中最薄弱的环节、以及什么证据会推翻该判断。
-- **缺口必须显式记录**：证据不足时标记信息缺口，不得靠叙述补足证据。
+You must produce an independent, auditable, and rollback-capable target-price analysis for **a single stock**.
 
 ---
 
-## 第二部分 · 动态研究引擎
+## Part 1 - Scope, Execution Overview, and Hard Constraints
 
-### 资料与搜索规范
+### Scope
 
-**可信度分层（从高到低）**
+- Analyze **a single stock** using publicly available information.
+- The default target-price horizon is 12 months; follow the user's horizon if specified.
+- The output is for research and education only and is not investment advice.
 
-1. 交易所公告、年报/中报/季报、业绩快报、10-K/10-Q/20-F、招股书、并购/定增/可转债材料
-2. 业绩会实录、投资者交流材料、资本市场日材料
-3. 行业协会、政府统计、海关、央行与监管、财政预算、官方利率与债券收益率、能源/运价/商品价格
-4. 客户与供应商公告、同业财报与公告
-5. 可验证的第三方数据库或财经终端
-6. 券商研报仅作参照，不作为假设起点
+### Terminology
 
-高层级来源优先用于建立事实底座与校验假设；低层级来源用于补充视角，但不能作为关键假设的唯一支撑。
+- **Adaptive Search Loop** = the dynamic search loop used for key research questions.
+- **Macro Overlay** = the conditional M1-M4 module.
+- Scenario labels must be **Bear / Base / Bull**.
 
-**信息分层**——全程标注信息层级：
+### Execution Overview
 
-- **事实**——已披露、可核验
-- **推断**——由事实延伸的判断
-- **假设**——尚未被验证的预测输入
+1. First confirm the stock, market, currency, current-price timestamp, reporting basis, and target-price horizon.
+2. Always run the internal process as Steps 0-12, including Step 5.5; do not use the final report outline as the analysis process.
+3. Run a full Adaptive Search Loop for key research questions, core variable validation, and major counter-evidence; low-risk fact checks only need source, timestamp, and scope.
+4. In Step 0, decide whether to enable the Macro Overlay; if enabled, run M1-M4.
+5. After Step 3, select the most relevant industry checklist as a supplement.
+6. In Step 5, lock in 1-3 core variables; use Step 5.5 to calibrate them against external base rates before forecasting and valuation.
+7. In Step 11, actively search for counter-evidence, run a pre-mortem, and process differences versus market-implied expectations.
+8. Final output must place the summary conclusion first, followed by the analysis report, and must state conclusion confidence.
 
-口径一致性是底线：报表口径、并表范围、股本基数、币种一旦混淆，后续数字失去意义。宏观/政策数据使用时标注时点，不把旧 regime 当作当前事实。
+### Control Rules
 
-### 自适应动态搜索循环
+- **Steps are the only backbone**: proceed through Steps 0-12, including Step 5.5.
+- **Dynamic research beats template filling**: key research questions must close the loop; do not turn low-risk fact checks into process overhead.
+- **Facts before valuation**: build the fact base first, then standardize earnings and cash flows, then choose valuation methods and parameters.
+- **Core variables must converge**: use only 1-3 variables that truly drive value; new evidence may overturn them.
+- **Key judgments must be traceable**: every important conclusion must trace back to facts, the weakest link in the reasoning chain, and evidence that would falsify it.
+- **Gaps must be explicit**: mark evidence gaps directly; do not fill missing evidence with narrative confidence.
 
-每次执行信息获取（搜索、阅读文档、查询数据）都必须完成一个闭环。不做无意图搜索，不允许机械堆砌来源。以下是每次搜索的内部自检流程，不需要写进最终报告。
+### Hard Constraints
 
-**搜索前 · 声明意图**
-
-- 本次要回答的**具体问题**（精确到假设层级，而非"了解公司"）
-- **预期信号**：什么结果证实 / 什么结果证伪 / 什么是意外但值得追踪
-
-**搜索后 · 评估**
-
-- **回答度**：完整 / 部分 / 未答 / 问题本身需修正
-- **信息分层**：把所获内容归入事实 / 推断 / 假设
-- **意外信号**：记录并判断是否立即追踪
-
-**下一步决策（五选一，不可省略）**
-
-| 决策 | 触发条件 | 动作 |
-|------|---------|------|
-| 推进 | 当前问题已充分解答 | 进入下一优先级问题 |
-| 深挖 | 方向正确但精度/覆盖不足 | 调整关键词、换数据源、寻找交叉验证 |
-| 转向 | 发现更重要或更紧迫的新问题 | 提升优先级，优先处理 |
-| 回退 | 新信息推翻已锁定假设或核心变量 | 回到 Step 5 更新变量集，记录触发证据与前后差异；回退过程须在最终报告中显式记录 |
-| 标记缺口 | 连续搜索无增量或数据确不可得 | 停止方向，记录缺口对结论的影响 |
-
-**空转保护**——同一问题连续 2 次搜索无增量，立即暂停诊断：意图是否模糊？关键词是否需要调整？数据源是否已穷尽？问题是否需要拆解？诊断后仍无进展，标记为信息缺口，不再空转。
+- Current share price is only for reverse checks and upside/downside measurement; it must not be used as a valuation input.
+- Always use fully diluted shares and handle convertibles, options, buybacks, issuances, and other potential dilution.
+- One-off gains, subsidies, asset disposals, short-term FX gains/losses, or temporary tax benefits must not be treated as long-term earning power.
+- The same growth logic must not be counted both in earnings forecasts and valuation multiple expansion.
+- Valuation parameters must match earnings quality, cash flow quality, cycle position, and the current rate/policy regime.
+- Do not apply high multiples to peak-cycle earnings, assign high-quality valuation to low-quality growth, or import valuation anchors from zero-rate or one-off policy-benefit regimes.
+- Probabilities in a probability-weighted target price are working assumptions, not precise measurements.
+- If core financial data is unavailable, share/debt/asset scope is materially uncertain, or valuation is dominated by a binary event whose probability cannot be estimated, do not provide a single-point target price; provide conditional ranges instead.
 
 ---
 
-## 第三部分 · 核心执行流程（Step 0–12）
+## Part 2 - Dynamic Research Engine
 
-按 Step 0–12 顺序推进。
+### Sources and Search Standards
 
-### Step 0：界定估值对象、口径与宏观暴露
+**Source reliability tiers, from highest to lowest**
 
-- **目标**：锁定估值对象、报表口径、历史可比性与主要外生暴露。
-- **必做动作**：
-  - 明确合并报表范围、联营与少数股东权益
-  - 检查近 1–2 年并购、剥离、分拆、融资、回购注销、会计口径变更
-  - 判断历史数据是否可比；不可比时先重述口径再看趋势
-  - 梳理区域、币种、融资、商品、政策暴露
-  - 判断是否启用宏观模块
-- **产出**：可比历史口径 + 宏观模块启用判断。
+1. Exchange filings, annual/interim/quarterly reports, earnings previews, 10-K/10-Q/20-F filings, prospectuses, M&A/private placement/convertible materials
+2. Earnings-call transcripts, investor presentations, capital markets day materials
+3. Industry associations, government statistics, customs data, central banks and regulators, fiscal budgets, official rates and bond yields, energy/freight/commodity prices
+4. Customer and supplier announcements, peer financial reports and filings
+5. Verifiable third-party databases or financial terminals
+6. Sell-side research only as reference, not as the starting point for assumptions
 
-### Step 1：历史经营事实底座
+Higher-tier sources should anchor the fact base and validate assumptions. Lower-tier sources may add perspective but must not be the sole support for a key assumption.
 
-- **目标**：建立 3–5 年经营与财务事实底稿，不急于下结论。
-- **必做动作**：
-  - 利润表：收入、毛利、营业利润、净利润；近 8 季度节奏；分业务/区域/币种拆解
-  - 资产负债表与现金流：经营现金流、capex、FCF；存货、应收、合同负债、应付；股本变化
-  - 经营质量：客户集中度、渠道结构、订单/产能、收入与现金流匹配度
-  - 归因：拆出哪些来自执行，哪些来自利率/汇率/商品/周期/政策
-- **产出**：先回答四问——增长从哪来？利润率变化由什么驱动？利润与现金流质量是否一致？哪些是可持续能力，哪些是外部顺风？
+**Information classification** - label information throughout:
 
-### Step 2：标准化盈利与现金流
+- **Fact** - disclosed and verifiable
+- **Inference** - judgment extended from facts
+- **Assumption** - forecast input not yet verified
 
-- **目标**：把历史报表还原成更接近真实经营能力的口径。
-- **必做动作**：
-  - 盈利端剥离：资产处置、投资收益、公允价值变动、汇兑损益、政府补贴、并购整合费用、一次性税惠
-  - 审视 non-GAAP：区分真正一次性与"年年发生"的伪一次性项目
-  - 现金流端检查：账期拉长、预收增加、保理美化、维护性 vs 扩张性 capex、租赁负债、资本化研发
-- **产出**：回答三问——真实盈利能力区间？现金创造相对利润偏强还是偏弱？利润率变化是结构性、周期性、政策性还是一次性？
+**Evidence Weighting Card** - key evidence must be assessed by:
 
-### Step 3：商业模式、行业结构、管理层
+- Source tier, timeliness, scope match, independence, impact on core variables, and conclusion direction: supportive / adverse / neutral
+- When sources conflict, prefer primary materials that are newer, better matched in scope, and more independent; if conflict cannot be reconciled, mark an evidence gap
 
-- **目标**：理解公司为何赚钱、如何竞争、管理层如何分配资本。
-- **必做动作**：
-  - 商业模式与行业：卖什么、客户为何买、替代品、价值链位置、增长驱动、竞争优势、行业状态
-  - 管理层与治理：指引兑现率、资本配置记录、利益对齐、增减持与公开表态一致性、股权激励考核条件
-- **产出**：把"业务逻辑—竞争格局—管理层资本配置"串成底稿，并列出候选关键变量供 Step 5 收敛。
+Scope consistency is a minimum requirement: reporting basis, consolidation scope, share count, and currency must not be mixed. Macro and policy data must be timestamped; do not treat an old regime as current fact.
 
-### Step 4：相关新闻挖掘与验证
+### Adaptive Search Loop
 
-- **目标**：捕捉财报与公告未覆盖的近期增量信息，经验证后补充或修正 Step 1–3 的事实底座。
+Use the full loop for key research questions, core variable validation, major counter-evidence, valuation parameter calibration, and material information conflicts. Low-risk fact checks, such as filing dates, share counts, or single financial line items, only need lightweight notes on source, timestamp, scope, and credibility; they do not require a search card.
 
-- **第一阶段 · 广度搜索**：
-  - 公司层面：近 3–6 个月的经营动态、管理层变动、战略调整、融资/并购/诉讼、股东增减持
-  - 行业层面：竞争格局变化、技术迭代、供需拐点、价格趋势
-  - 政策与监管：影响公司的新政策、监管动向、关税/补贴变化
-  - 供应链与客户：上下游异动、大客户或大供应商的重大变化
-  - 覆盖中英文信源，避免单一来源偏差
+Do not search without intent or stack sources mechanically. Search cards are internal by default; if a rollback, major assumption failure, or important evidence gap occurs, the final report must disclose the reason, impact, and treatment.
 
-- **第二阶段 · 有效性验证与深度挖掘**：
-  - 交叉验证：每条重要新闻与一手材料（公告、财报、业绩会）对照，区分已确认事实与媒体推测
-  - 影响评估：判断每条有效新闻对收入、成本、现金流、估值的传导路径与量级
-  - 深度追踪：对高影响新闻线索进行专题深挖，追溯事件全貌与后续进展
-  - 过滤噪音：剔除无实质影响的情绪性报道、重复转载、过时信息
+**Before Search - State Intent**
 
-- **产出**：经过验证的增量信息清单，标注信息层级（事实/推断/假设）与对估值的潜在影响方向。
+- The **specific question** to answer, precise enough to operate at the assumption level rather than "understand the company"
+- **Expected signals**: what would confirm, what would disconfirm, and what would be surprising but worth tracking
 
-### Step 5：锁定核心变量并定向验证
+**After Search - Evaluate**
 
-- **目标**：从候选变量中收敛到 1–3 个真正主导未来一两年估值的变量。未经定向验证不进入 Step 6 预测。
-- **必做动作**：
-  - 说明为什么选这几个变量，而不是平均对待所有指标
-  - 标明哪些变量内生、哪些外生；列出领先指标；指出市场当前隐含预期
-  - 对每个核心变量执行定向验证：
-    - 子问题：方向、量级、持续性、传导弹性、历史可比情境
-    - 领先指标：未来 3–12 个月前置信号
-    - 抓取后动作：强化 / 削弱 / 推翻；推翻则回退并更新变量集
-- **产出**：每个核心变量的判断依据——说明关键逻辑链条中最薄弱的环节，以及什么证据会推翻该判断。
+- **Answer completeness**: complete / partial / unanswered / question needs revision
+- **Information class**: classify new content as fact / inference / assumption
+- **Surprise signals**: record and decide whether to follow immediately
 
-### Step 6：分业务、分驱动预测
+**Next-Step Decision - choose one**
 
-- **目标**：把预测建立在可解释经营驱动上，而不是直接拍增速。
-- **必做动作**：
-  - 大客户或项目制公司按客户/产品线拆；披露有限时至少做量/价/结构拆解，视情况加入并表、汇率等因子
-  - 毛利率桥接：价格、成本、利用率、结构、汇率、商品成本
-  - 费用率桥接：规模效应、扩张投入、激励摊销、区域扩张
-  - 同步处理营运资本、capex、再融资、完全摊薄股本，保持口径一致
-  - 每个关键假设都要标注来源：历史惯性 / 公司执行 / 宏观情景 / 政策地缘
-- **产出**：分业务 + 分驱动 + 分情景的预测框架。
+| Decision | Trigger | Action |
+|----------|---------|--------|
+| Advance | The current question is sufficiently answered | Move to the next priority question |
+| Dig deeper | Direction is right but precision or coverage is insufficient | Adjust keywords, change data source, seek cross-checks |
+| Pivot | A more important or urgent new question appears | Raise priority and handle it first |
+| Roll back | New information invalidates a locked assumption or core variable | Return to Step 5, update the variable set, and record trigger evidence and before/after differences; disclose the rollback in the final report |
+| Mark gap | Repeated searches add no value or data is unavailable | Stop that path and record the impact of the gap |
 
-### Step 7：资本效率、现金流质量与资产负债表韧性
+**Internal Search Card**
 
-- **目标**：检验 Step 6 预测在资本效率、现金流与资产负债表层面是否站得住。
-- **必做动作**：
-  - 判断收入增长对应的营运资本变化是否合理
-  - 检查利润率假设是否建立在过于乐观的利用率或成本上
-  - 核对 FCF 方向与利润增长是否一致
-  - 评估 capex、研发、再融资对现金的压力
-  - 检查预测隐含的 ROIC 与增量 ROIC 是否偏离历史与行业合理区间
-- **产出**：确认预测是否能穿过现金流与资产负债表的检验；若不能，回头重审增长可持续性。
+- Question:
+- Expected confirming signal:
+- Expected disconfirming signal:
+- Actual finding:
+- Information class: fact / inference / assumption
+- Evidence weight: high / medium / low
+- Answer completeness: complete / partial / unanswered / question needs revision
+- Next step: advance / dig deeper / pivot / roll back / mark gap
 
-### Step 8：估值方法与参数
-
-- **目标**：选择与商业模式匹配的估值方法，并基于公司质量、周期位置与风险溢价确定参数。
-- **方法选择**：
-  - **PE**：盈利稳定、利润与现金流匹配
-  - **EV/EBIT 或 EV/EBITDA**：折旧重、资本结构差异大
-  - **PB/ROE**：资产负债表驱动（银行、保险）
-  - **DCF**：现金流可预测、可长期外推
-  - **SOTP**：多业务差异大或有分拆预期
-  - **周期股**：使用中周期利润，不在景气顶点硬外推
-  - **未盈利 biotech**：风险调整估值或事件树
-- **校验要求**：估值口径与利润口径匹配；估值年份对准经营拐点；主方法与交叉验证不能重复计入同一逻辑。
-- **参数判断**——根据公司实际情况，从以下维度选择相关项：
-  - **增长质量**：增长来自量/价/结构哪个更可持续；利润率改善依赖经营质量还是一次性
-  - **现金流质量**：FCF 与利润方向是否一致
-  - **资本效率**：ROIC 与增量 ROIC 是否支撑增长估值
-  - **周期位置**：利润处于低谷/中枢/高点；库存、价格、产能是否错配
-  - **风险溢价**：无风险利率、信用利差、国家/区域风险、融资环境；股价已经定价了怎样的增速、利润率、风险溢价
-- **参照系**：公司历史估值区间、同业分位数，以及同业在增长/利润率/现金流/商业模式/宏观暴露上的差异
-- **硬约束**：不在景气高点利润上叠加高倍数；不给低质量增长配高质量估值；不将同一增长逻辑同时计入盈利预测与估值溢价；不把零利率或单一政策红利阶段的估值中枢搬到当前 regime。
-- **产出**：主估值方法 + 交叉验证方法 + 关键估值参数及其判断依据。
-
-### Step 9：EV 到股权价值桥接
-
-- **目标**：把企业价值完整桥接为每股股权价值。
-- **必做动作**：
-  - 扣净债务
-  - 处理少数股东权益、可转债、租赁负债等类债项目
-  - 单列非核心资产与联营公司权益
-  - 使用保守的完全摊薄股本
-  - SOTP 时检查总部费用、现金债务、税收与交叉持股是否重复或遗漏
-  - 涉及跨币种债务、海外资产/现金、分红限制、再融资压力时，明确币种与融资成本口径
-  - 评估分红、回购、再投资、并购等资本回报策略能否把利润增长转化为每股价值增长
-- **产出**：清晰的 EV → Equity → Per Share 桥接。
-
-### Step 10：三情景与敏感性
-
-- **目标**：围绕核心变量构建 Bear / Base / Bull，而不是机械上下浮动。
-- **必做动作**：
-  - 每个情景独立说明假设依据
-  - 显式说明三个情景中哪些假设变了、为什么变、变量间相关性如何变化
-  - 优先测试最脆弱假设：销量/用户增长、ASP/结构、毛利率、capex/FCF 转换率、估值倍数/折现率
-  - 若给概率加权目标价，说明概率只是工作假设，不伪精确到小数点
-- **产出**：三情景估值区间 + 关键敏感性。
-
-### Step 11：反向校验与反证处理
-
-- **目标**：主动搜索能推翻 base case 的证据，处理反证，并检查自己是否真的比市场多知道了什么。
-- **必做动作**：
-  - 主动搜索至少 2–3 条对 base case 有实质挑战的反证，每条完成量化评估；若找不到任何实质反证，须警惕搜索过窄导致的确认偏差，补做一轮
-  - 对反证清单逐条做权重评估：接受 / 修正 / 拒绝，并说明依据
-  - 倒推当前股价隐含的收入增速、利润率、ROIC、风险溢价
-  - 与市场一致预期比较：收入、毛利率、净利润、EPS；显著偏差须说明分歧依据
-- **产出**：反证处理结果 + 当前价格隐含预期 + 与一致预期的差异解释。
-
-### Step 12：收敛为可解释、可跟踪、可更新的判断
-
-- **目标**：把分析收敛为能被跟踪、也能被证伪的结论。
-- **必须覆盖四层面**：
-  - **经营**：未来一两年最关键的兑现节点
-  - **宏观**：哪些外生变量决定预测成立（若启用）
-  - **估值**：当前价与合理价值的差距来自业绩差、预期差还是风险溢价差
-  - **证伪**：哪几个数据点最可能推翻判断
-- **最终确认**：
-  1. 结论由事实与逻辑推导，未被当前股价、市场情绪或卖方一致预期锚定
-  2. 关键假设数量足够少，且可被公开数据跟踪
-  3. 宏观启用时，已区分公司执行贡献与外部环境重估贡献
-- **产出**：可解释、可跟踪、可更新的目标价判断。
+**Idle-loop protection** - if two consecutive searches on the same question add no new information, pause and diagnose: Is the intent vague? Do keywords need adjustment? Are sources exhausted? Should the question be decomposed? If still no progress after diagnosis, mark an evidence gap and stop looping.
 
 ---
 
-## 第四部分 · 宏观增强模块（条件触发）
+## Part 3 - Core Workflow (Steps 0-12, Including Step 5.5)
 
-只有当外生变量显著驱动公司价值时才启用本模块。若所有触发条件都不满足，可以不启用，但必须在报告中说明理由。
+Proceed through Steps 0-12 in order; Step 5.5 is the calibration step before forecasting.
 
-### 何时启用
+### Step 0 - Define the Valuation Subject, Scope, and Macro Exposure
 
-满足任一条件即启用：
+- **Goal**: lock the valuation subject, reporting scope, historical comparability, and main exogenous exposures.
+- **Required actions**:
+  - Define consolidation scope, associates, and minority interests
+  - Check M&A, disposals, spin-offs, financing, buybacks/cancellations, and accounting changes over the last 1-2 years
+  - Determine whether historical data is comparable; if not, restate scope before reading trends
+  - Map regional, currency, financing, commodity, and policy exposures
+  - Quick trigger check: if the company is materially exposed to rates, FX, commodities, energy, tariffs, subsidies, regulation, geopolitics, or credit cycles, enable the Macro Overlay
+  - Record the reason for enabling or not enabling the Macro Overlay
+- **Output**: comparable historical scope plus Macro Overlay decision.
 
-1. 收入/成本/现金流/估值显著受**利率、信用、汇率、商品、能源、运价、关税、补贴、监管、地缘事件**驱动
-2. 行业属于**强周期、信用驱动、库存驱动、地产/基建/capex/政策驱动**，或估值高度依赖折现率与风险偏好
-3. 显著**海外收入/采购/产能/跨币种负债**，或区域风险敞口集中
-4. 历史数据跨越**制度切换**：加息转降息、疫情后修复、补贴退坡、出口限制、供应链迁移、战争/制裁、税制变化
-5. 市场分歧的核心在外生变量方向或幅度，而非公司执行
+### Step 1 - Historical Operating Fact Base
 
-### M1 · 定义当前 regime
+- **Goal**: build a 3-5 year operating and financial fact base before drawing conclusions.
+- **Required actions**:
+  - Income statement: revenue, gross profit, operating profit, net income; last 8 quarters; segment/region/currency breakdown
+  - Balance sheet and cash flow: operating cash flow, capex, FCF; inventory, receivables, contract liabilities, payables; share count changes
+  - Operating quality: customer concentration, channel structure, orders/capacity, revenue-cash flow match
+  - Attribution: separate company execution from rates, FX, commodities, cycles, and policy
+- **Output**: answer four questions first: Where does growth come from? What drives margin change? Do profit and cash flow quality align? Which items are sustainable capabilities and which are external tailwinds?
 
-只保留 3–6 个最关键外生变量；超过 6 个通常说明主线未聚焦。候选维度：
+### Step 2 - Standardized Earnings and Cash Flow
 
-- 增长/需求：GDP、工业增加值、PMI、社零、地产/基建/制造业投资、企业 IT 预算、信用脉冲
-- 通胀/成本：CPI、PPI、工资、原材料、能源、运价
-- 利率/流动性：政策利率、国债收益率、信用利差、融资可得性
-- 汇率/跨境：主要结算货币、资本流向、海外需求分化
-- 政策/地缘：关税、制裁、补贴、监管强度、出口限制、冲突对供应链/需求的冲击
+- **Goal**: restate historical financials into a view closer to true operating capability.
+- **Required actions**:
+  - Strip out asset disposals, investment income, fair-value changes, FX gains/losses, subsidies, M&A integration costs, and one-off tax benefits
+  - Review non-GAAP adjustments: distinguish truly one-off items from recurring "one-offs"
+  - Check cash flow: longer collection periods, rising prepayments, factoring, maintenance vs growth capex, lease liabilities, capitalized R&D
+- **Output**: answer three questions: What is the true earning-power range? Is cash generation stronger or weaker than profit? Is margin change structural, cyclical, policy-driven, or one-off?
 
-### M2 · 构建三路径
+### Step 3 - Business Model, Industry Structure, and Management
 
-至少构建 Bear / Base / Bull 三条路径。每条都要写清：外生变量如何演变；设定依据是什么（逻辑而非机械上下）；哪些公开指标可持续验证或证伪。
+- **Goal**: understand why the company makes money, how it competes, and how management allocates capital.
+- **Required actions**:
+  - Business model and industry: what it sells, why customers buy, substitutes, value-chain position, growth drivers, competitive advantage, industry state
+  - Management and governance: guidance delivery record, capital allocation record, incentive alignment, insider transactions vs public statements, equity-incentive conditions
+  - Select the most relevant industry checklist to supplement candidate core variables and risks
+- **Output**: connect business logic, competition, and capital allocation into a working note, and list candidate key variables for Step 5.
 
-### M3 · 映射到公司层
+### Step 4 - Recent News Mining and Validation
 
-每个宏观变量都要落到具体传导端，产出直接作为 Step 6 预测框架的输入：
+- **Goal**: capture recent information not yet visible in reports or filings, then validate it before updating the Step 1-3 fact base.
 
-- 收入端：销量、客户预算、产能利用率、同店、渗透率、项目节奏、区域需求
-- 价格/结构：ASP、ARPU、产品组合、折扣率、合同条款
-- 成本：原材料、能源、人工、运费、采购币种
-- 费用/capex：销售投入、研发节奏、扩产、维护性/扩张性 capex
-- 现金流/资产负债：营运资本、存货、应收、再融资压力
-- 估值：无风险利率、ERP、信用利差、可比倍数中枢
+- **Phase 1 - Broad Search**:
+  - Company level: operating updates, management changes, strategic shifts, financing/M&A/litigation, shareholder transactions over the last 3-6 months
+  - Industry level: competitive changes, technology shifts, supply-demand inflection points, price trends
+  - Policy and regulation: new policies, regulatory actions, tariffs/subsidies
+  - Supply chain and customers: major changes at upstream/downstream parties, key customers, or key suppliers
+  - Cover English and local-language sources where relevant; avoid single-source bias
 
-### M4 · 监控面板
+- **Phase 2 - Validity Check and Deep Dive**:
+  - Cross-check each important news item against primary materials such as filings, reports, and earnings calls; separate confirmed facts from media speculation
+  - Assess transmission path and magnitude for revenue, cost, cash flow, and valuation
+  - Deep dive into high-impact leads by tracing event history and follow-up developments
+  - Filter noise: remove emotional coverage, repeated syndication, and stale information with no substantive impact
 
-为每个关键外生变量记录：当前观察值与方向；未来 3–12 个月领先指标；何种变化会导致 base case 失效。
+- **Output**: validated incremental-information list, labeled as fact / inference / assumption and tagged with potential valuation impact direction.
 
-### 启用后对主流程的增补
+### Step 5 - Lock Core Variables and Perform Targeted Validation
 
-所有宏观相关增补集中在这里，主流程不再散落 if/else。
+- **Goal**: converge from candidate variables to 1-3 variables that truly drive the next 1-2 years of valuation. Do not enter Step 6 forecasting before targeted validation.
+- **Required actions**:
+  - Explain why these variables are selected instead of treating all metrics equally
+  - Mark each variable as endogenous or exogenous; list leading indicators; identify current market-implied expectations
+  - For each core variable, run targeted validation:
+    - Sub-questions: direction, magnitude, durability, transmission elasticity, historical comparable situations
+    - Leading indicators: early signals over the next 3-12 months
+    - Post-search action: strengthen / weaken / invalidate; if invalidated, roll back and update the variable set
+- **Output**: evidence basis for each core variable, including the weakest link in the reasoning chain and evidence that would falsify the judgment.
 
-| 主流程位置 | 启用宏观模块时的增补 |
-|-----------|-------------------|
-| Step 0 | 列出 3–6 个关键外生变量（M1） |
-| Step 2 标准化 | 多拆一层：剔除低利率、汇率、原材料、补贴、税惠、景气位置的扰动，逼近中性环境盈利能力 |
-| Step 3 传导 | 外生变量如何先作用于行业、再传导至公司；区分快变量（当季见效）与 1–4 季度时滞 |
-| Step 5 核心变量 | 至少含 1 个外生变量，除非能论证影响微弱 |
-| Step 6 预测 | 采用"外生变量 → 行业量价结构 → 公司量价结构 capex → 利润现金流"框架；每个假设标注来源 |
-| Step 7 质量校验 | Bear 情景现金流/再融资/契约压力；汇率+商品+需求同时下修的弹性；能否撑过完整下行周期 |
-| Step 8 方法与参数 | 优先能清晰分离经营假设与估值参数的方法；成长股用 DCF/PE 交叉、周期用中周期利润/NAV/成本曲线、金融用 ROE/PB、多币种确保口径一致；参数须与 base case 宏观环境一致 |
-| Step 10 情景 | "宏观路径 × 公司执行"矩阵；敏感性加入 1–2 个关键外生变量（实际利率/商品/汇率/信用利差/运价） |
-| Step 11 反向校验 | 额外倒推当前价格隐含的利率/汇率/商品/信用/政策路径，与 base case 对比 |
-| Step 12 收敛 | 显式区分：哪些价值来自公司执行，哪些来自外部环境重估 |
+### Step 5.5 - External Base-Rate Calibration
+
+- **Goal**: constrain core variables with reference classes and avoid an inside-view story.
+- **Required actions**:
+  - For each core variable, find a reference class: similar companies, similar cycles, similar product stages, similar policy environments, or similar capital structures
+  - Check historical delivery rates, failure rates, ramp-up periods, margin ceilings, and valuation recovery/rerating/derating cycles
+  - Judge whether the current forecast is conservative, neutral, or aggressive versus the base rate; explain any material deviation
+- **Output**: base-rate calibration conclusion for each core variable.
+
+### Step 6 - Segment-Level and Driver-Based Forecasting
+
+- **Goal**: build forecasts from explainable operating drivers rather than direct growth-rate guesses.
+- **Required actions**:
+  - Build a value-driver tree for each core variable: external/internal driver -> operating metric -> financial metric -> valuation parameter -> per-share value
+  - Narratives that cannot map to revenue, margin, cash flow, share count, or valuation parameters must not be treated as core variables
+  - For large-customer or project-based companies, break down by customer/product line; when disclosure is limited, at least split volume/price/mix and add consolidation or FX factors where relevant
+  - Gross-margin bridge: price, cost, utilization, mix, FX, commodity cost
+  - Expense-ratio bridge: scale effects, expansion spending, incentive amortization, regional expansion
+  - Handle working capital, capex, refinancing, and fully diluted shares consistently
+  - Label each key assumption source: historical inertia / company execution / macro scenario / policy or geopolitics
+- **Output**: forecast framework by segment, driver, and scenario.
+
+### Step 7 - Capital Efficiency, Cash Flow Quality, and Balance Sheet Resilience
+
+- **Goal**: test whether Step 6 forecasts hold up under capital efficiency, cash flow, and balance-sheet checks.
+- **Required actions**:
+  - Check whether revenue growth implies reasonable working-capital changes
+  - Check whether margin assumptions rely on overly optimistic utilization or costs
+  - Verify that FCF direction is consistent with profit growth
+  - Assess cash pressure from capex, R&D, and refinancing
+  - Check whether implied ROIC and incremental ROIC deviate from historical and industry ranges
+  - Run a three-statement consistency check: revenue, working capital, capex, depreciation, cash, net debt, and share-count changes must not contradict one another
+- **Output**: confirm whether the forecast passes cash-flow and balance-sheet tests; if not, revisit growth sustainability.
+
+### Step 8 - Valuation Methods and Parameters
+
+- **Goal**: choose valuation methods that fit the business model and set parameters based on company quality, cycle position, and risk premium.
+
+**8.1 Method Selection**
+
+  - **PE**: stable earnings, profit aligned with cash flow
+  - **EV/EBIT or EV/EBITDA**: heavy depreciation or large capital-structure differences
+  - **PB/ROE**: balance-sheet-driven businesses such as banks and insurers
+  - **DCF**: cash flows are forecastable and can be extrapolated long term
+  - **SOTP**: business segments differ materially or a spin-off is expected
+  - **Cyclicals**: use mid-cycle earnings, not extrapolated peak-cycle earnings
+  - **Pre-profit biotech**: risk-adjusted valuation or event tree
+
+**8.2 Scope and Reference-Set Checks**
+
+  - Valuation metric must match earnings/cash-flow metric
+  - Valuation year must align with the operating inflection point
+  - Primary method and cross-checks must not double-count the same logic
+  - Compare with company historical valuation ranges and peer percentiles, adjusting for differences in growth, margins, cash flow, business model, and macro exposure
+
+**8.3 Parameter Calibration** - select relevant dimensions based on the company:
+
+  - **Growth quality**: whether growth comes from volume, price, or mix, and which is most durable; whether margin improvement is operational or one-off
+  - **Cash flow quality**: whether FCF and profit move in the same direction
+  - **Capital efficiency**: whether ROIC and incremental ROIC support the growth valuation
+  - **Cycle position**: whether profit is at trough, mid-cycle, or peak; whether inventory, price, and capacity are mismatched
+  - **Risk premium**: risk-free rate, credit spreads, country/region risk, financing environment; what growth, margin, and risk premium the current price already implies
+
+**8.4 Valuation Constraint Check**
+
+  - Do not repeat the hard constraints from Part 1; in this step, explain how valuation parameters match earnings quality, cash flow quality, cycle position, and current regime
+  - If the primary method deviates from peer or historical valuation anchors, explain whether the deviation comes from growth quality, cash flow, capital efficiency, risk premium, or cycle position
+
+**8.5 Method Conflict Handling**
+
+  - When methods produce materially different results, first identify which method best fits the business model, cash flow quality, and cycle position
+  - Explain whether differences come from earnings scope, capital structure, terminal-value assumptions, cycle position, or risk premium
+  - Do not mechanically average valuation results; cross-checks constrain the primary method and must not double-count the same logic
+  - If DCF value is mainly terminal value, lower conclusion strength and run terminal-value sensitivity
+
+- **Output**: primary valuation method, cross-check method, key valuation parameters, and supporting rationale.
+
+### Step 9 - EV-to-Equity Bridge
+
+- **Goal**: bridge enterprise value fully to per-share equity value.
+- **Required actions**:
+  - Deduct net debt
+  - Handle minority interests, convertibles, lease liabilities, and debt-like items
+  - List non-core assets and associate-company interests separately
+  - Use conservative fully diluted shares
+  - In SOTP, check holding-company costs, cash/debt, taxes, and cross-holdings for omissions or double counting
+  - For cross-currency debt, overseas assets/cash, dividend restrictions, or refinancing pressure, state currency and financing-cost basis
+  - Assess whether dividends, buybacks, reinvestment, or M&A can translate profit growth into per-share value growth
+- **Output**: clear EV -> Equity -> Per Share bridge.
+
+### Step 10 - Three Scenarios and Sensitivity
+
+- **Goal**: build Bear / Base / Bull around core variables, not mechanical +/- adjustments.
+- **Required actions**:
+  - Explain each scenario's assumptions independently
+  - State which assumptions change across the three scenarios, why they change, and how variable correlations change
+  - Prioritize fragile assumptions: volume/user growth, ASP/mix, gross margin, capex/FCF conversion, valuation multiple/discount rate
+  - If providing a probability-weighted target price, probabilities must come from base rates, comparable cycle experience, order/approval progress, macro-path judgment, or explicit subjective assumptions; do not default to 25% / 50% / 25%
+- **Output**: three-scenario valuation range plus key sensitivities.
+
+### Step 11 - Reverse Check and Counter-Evidence Handling
+
+- **Goal**: actively search for evidence that could invalidate the base case, process it, and test whether the analysis truly knows something different from the market.
+- **Required actions**:
+  - Search for at least 2-3 pieces of substantive counter-evidence against the base case and quantify each; if none is found, suspect confirmation bias from overly narrow search and run one more pass
+  - For each counter-evidence item, assess weight and decide: accept / revise / reject, with rationale
+  - Run a pre-mortem: assume the target price is materially wrong 12 months later, list the 3 most likely reasons and corresponding monitoring indicators
+  - Reverse-engineer the current share price's implied revenue growth, margins, ROIC, and risk premium
+  - Compare with consensus expectations for revenue, gross margin, net income, and EPS; identify the 1-2 variables with the largest difference versus market-implied expectations
+- **Output**: counter-evidence treatment, pre-mortem, current-price implied expectations, and explanation of differences versus consensus.
+
+### Step 12 - Converge into an Explainable, Trackable, and Updatable Judgment
+
+- **Goal**: convert the analysis into a conclusion that can be tracked and falsified.
+- **Must cover four layers**:
+  - **Operations**: the key delivery milestones over the next 1-2 years
+  - **Macro**: which exogenous variables determine forecast validity, if enabled
+  - **Valuation**: whether the gap between current price and fair value comes from earnings difference, expectation difference, or risk-premium difference
+  - **Falsification**: which data points are most likely to invalidate the judgment
+- **Target-price path**: list key validation milestones over the next 3 / 6 / 12 months; state which reported items, operating metrics, capital-return actions, or external variables could drive market repricing.
+- **Conclusion confidence**: high / medium / low, with rationale based on fact-base completeness, core-variable observability, sensitivity, valuation-method robustness, counter-evidence strength, and macro uncertainty.
+- **Update protocol**:
+  - Earnings release: rerun Steps 1, 2, 6, 7, and 11
+  - Core variable invalidated: roll back to Step 5
+  - Macro regime shift: rerun M1-M4 and Steps 6, 8, 10, and 11
+  - Material share count, debt, M&A, or asset-scope change: rerun Step 9
+  - Each update must explain the source of target-price change: earnings forecast, valuation parameter, net debt, share count, or scenario probability
+- **Final checks**:
+  1. The conclusion is derived from facts and logic, not anchored by current share price, market sentiment, or sell-side consensus.
+  2. Key assumptions are few enough and trackable through public data.
+  3. If macro is enabled, company execution value is separated from external-regime repricing value.
+- **Output**: explainable, trackable, updatable target-price judgment with confidence label.
 
 ---
 
-## 第五部分 · 行业适配
+## Part 4 - Macro Overlay (Conditional)
 
-只参考与目标公司最相关的行业章节。行业章节是补充视角，不能替代 Step 0–12 主流程。
+Only enable this module when exogenous variables materially drive company value. If no trigger applies, you may skip the module, but the report must state why.
 
-### 制造 / 汽车零部件 / 工业
+### When to Enable
 
-- 核心变量：出货量、ASP、单车价值量、产能利用率、capex、客户集中度
-- 特别关注：项目制公司中，爬坡进度往往比表观收入增速更重要
-- 宏观补充：制造业投资、下游 capex、汇率、关税、原材料、运费
+First estimate impact magnitude. Enable by default if a single exogenous variable could affect revenue, gross profit, FCF, or valuation multiple by more than 10% over the next 12-24 months. Below 5%, usually mention it only in the risk section. For 5%-10%, decide based on whether it enters the core variable set.
 
-### 消费
+Enable if any condition applies:
 
-- 核心变量：同店增长、渠道扩张、终端折扣、库存健康、提价能力、复购率
-- 关键判断：增长来自真实需求，还是渠道补库存 + 提价形成的表观繁荣
-- 宏观补充：居民收入、就业、消费信心、地产财富效应、食品与原材料成本
+1. Revenue, cost, cash flow, or valuation is materially driven by **rates, credit, FX, commodities, energy, freight, tariffs, subsidies, regulation, or geopolitical events**
+2. The industry is **strongly cyclical, credit-driven, inventory-driven, real-estate/infrastructure/capex/policy-driven**, or valuation is highly sensitive to discount rates and risk appetite
+3. The company has significant **overseas revenue, overseas procurement, overseas capacity, cross-currency debt**, or concentrated regional risk exposure
+4. Historical data crosses a **regime shift**: rate hikes to cuts, post-pandemic reopening, subsidy rollback, export controls, supply-chain migration, war/sanctions, tax changes
+5. The market debate centers on the direction or magnitude of exogenous variables rather than company execution
 
-### 互联网 / 软件 / 平台
+### M1 - Define the Current Regime
 
-- 核心变量：用户增长与留存、付费率、ARPU、获客成本、贡献利润率、股票薪酬
-- 关键判断：经营杠杆是不是估值弹性的主要来源
-- 宏观补充：广告预算、企业 IT 支出、融资环境、实际利率对成长股估值的影响
+Keep only the 3-6 most important exogenous variables; more than 6 usually means the thesis is unfocused. Candidate dimensions:
 
-### 半导体 / 硬件
+- Growth/demand: GDP, industrial output, PMI, retail sales, real estate/infrastructure/manufacturing investment, enterprise IT budgets, credit impulse
+- Inflation/cost: CPI, PPI, wages, raw materials, energy, freight
+- Rates/liquidity: policy rates, government bond yields, credit spreads, financing availability
+- FX/cross-border: main settlement currencies, capital flows, overseas demand divergence
+- Policy/geopolitics: tariffs, sanctions, subsidies, regulatory intensity, export controls, conflict impact on supply chain/demand
 
-- 核心变量：ASP、良率、产能利用率、渠道库存、设计赢单管线、技术代际
-- 关键判断：周期位置不可省略，它决定该用什么利润水平乘倍数
-- 宏观补充：全球电子需求、服务器/AI capex、出口限制、汇率、设备投资周期
+### M2 - Build Three Paths
 
-### 银行 / 保险 / 券商
+Construct at least Bear / Base / Bull paths. For each path, state how exogenous variables evolve, what the basis is, and which public indicators can validate or falsify the path.
 
-- 核心变量：ROE、资产质量、拨备、资本充足率、负债成本、投资收益可持续性
-- 关键判断：资产负债表逻辑优先，不可套用 EV 口径
-- 宏观补充：利率曲线、信用成本、地产与就业、监管导向、资本市场活跃度
+### M3 - Map to Company-Level Transmission
 
-### 周期 / 资源 / 化工 / 航运
+Each macro variable must map to specific transmission channels and feed directly into the Step 6 forecast framework:
 
-- 核心变量：价格周期位置、库存水位、供给约束、成本曲线、新产能投放
-- 关键判断：用中周期利润或资产价值视角，避免把景气高点利润直接外推
-- 宏观补充：中国/全球需求、能源、美元、航运路线、制裁与贸易政策
+- Revenue: volume, customer budgets, utilization, same-store sales, penetration, project cadence, regional demand
+- Price/mix: ASP, ARPU, product mix, discounts, contract terms
+- Cost: raw materials, energy, labor, freight, procurement currency
+- Opex/capex: selling investment, R&D cadence, capacity expansion, maintenance/growth capex
+- Cash flow/balance sheet: working capital, inventory, receivables, refinancing pressure
+- Valuation: risk-free rate, ERP, credit spread, comparable multiple anchor
 
-### 未盈利 biotech / 早期硬科技
+### M4 - Monitoring Dashboard
 
-- 核心变量：里程碑兑现概率、现金消耗、下一轮融资需求、商业化路径
-- 关键判断：产出应是价值区间与事件敏感性，而非伪精确的点估值
-- 宏观补充：融资环境、利率、审批节奏、支付方政策、关键设备/技术出口限制
+For each key exogenous variable, record the current observed value and direction, leading indicators over the next 3-12 months, and what change would invalidate the base case.
+
+### Additions to the Main Flow When Enabled
+
+Keep all macro-related additions here so the main workflow does not scatter conditional branches.
+
+| Main Workflow Location | Addition When Macro Overlay Is Enabled |
+|------------------------|-----------------------------------------|
+| Step 0 | List 3-6 key exogenous variables from M1 |
+| Step 2 standardization | Add one layer: strip out distortions from low rates, FX, raw materials, subsidies, tax benefits, and cycle position to estimate neutral-environment earning power |
+| Step 3 transmission | Explain how exogenous variables affect the industry first and then the company; distinguish fast variables from 1-4 quarter lag effects |
+| Step 5 core variables | Include at least one exogenous variable unless its impact can be shown to be weak |
+| Step 6 forecast | Use the chain "exogenous variable -> industry volume/price/mix -> company volume/price/mix/capex -> profit/cash flow"; label assumption sources |
+| Step 7 quality check | Test Bear-case cash flow/refinancing/covenant pressure; combined FX + commodity + demand downside; ability to survive a full downturn |
+| Step 8 method and parameters | Prefer methods that separate operating assumptions from valuation parameters; for growth stocks use DCF/PE cross-checks, cyclicals use mid-cycle earnings/NAV/cost curve, financials use ROE/PB, and multi-currency cases must keep scope consistent; parameters must match the base-case macro environment |
+| Step 10 scenarios | Use a "macro path x company execution" matrix; add 1-2 key exogenous variables to sensitivity, such as real rates, commodities, FX, credit spreads, or freight |
+| Step 11 reverse check | Also reverse-engineer the rates/FX/commodity/credit/policy path implied by current price and compare with the base case |
+| Step 12 convergence | Explicitly separate value from company execution versus value from external-regime repricing |
 
 ---
 
-## 第六部分 · 输出格式
+## Part 5 - Industry Adaptation
 
-两部分：**简要结论在前，分析报告在后**。
+Use only the industry checklist most relevant to the target company. Industry checklists are supplements and must not replace the Step 0-12 workflow.
 
-### 简要结论
+| Industry | Core Variables | Key Judgments and Macro Supplements |
+|----------|----------------|-------------------------------------|
+| Manufacturing / Auto Parts / Industrials | Shipments, ASP, content per vehicle/unit, utilization, capex, customer concentration | Project ramp often matters more than headline revenue growth; watch manufacturing investment, downstream capex, FX, tariffs, raw materials, freight |
+| Consumer | Same-store sales, channel expansion, terminal discounts, inventory health, pricing power, repeat purchase | Separate real demand from restocking plus price hikes; watch income, employment, confidence, real-estate wealth effect, food and raw-material costs |
+| Internet / Software / Platforms | User growth and retention, paid conversion, ARPU, CAC, contribution margin, SBC | Determine whether operating leverage is the main valuation elasticity; watch ad budgets, IT spending, funding environment, real rates |
+| Semiconductors / Hardware | ASP, yield, utilization, channel inventory, design-win pipeline, technology generation | Cycle position determines earnings scope; watch electronics demand, server/AI capex, export controls, FX, equipment investment cycle |
+| Banks / Insurance / Brokers | ROE, asset quality, provisions, capital adequacy, funding cost, investment-income sustainability | Balance-sheet logic comes first; do not use EV metrics; watch yield curve, credit cost, real estate/employment, regulation, capital-market activity |
+| Cyclicals / Resources / Chemicals / Shipping | Price cycle position, inventory level, supply constraints, cost curve, new capacity | Use mid-cycle earnings or asset value and avoid extrapolating peak-cycle conditions; watch global demand, energy, USD, routes, sanctions, trade policy |
+| Pre-profit Biotech / Early Deep Tech | Milestone probability, cash burn, financing need, commercialization path | Provide value ranges and event sensitivity rather than false precision; watch financing environment, rates, approval cadence, payer policy, export controls |
 
-至少包含以下要素：
+---
 
-- 股票名称、代码、当前股价
-- 是否启用宏观模块
-- 12 个月基准目标价及乐观/悲观区间
-- 可选概率加权目标价
-- 基准情景核心盈利预测（营收、净利润、EPS/FCF）与估值方法/参数
-- 相对股价空间
-- 宏观路径一句话（若启用）
-- 估值逻辑一两句
-- 最大上行催化与最大下行风险各一条
-- 2–3 个关键跟踪指标
-- 免责声明
+## Part 6 - Output Format
 
-**示例**（数字为占位符）：
+Two parts: **summary conclusion first, analysis report second**.
+
+### Process-to-Report Mapping
+
+Steps 0-12 are the internal analysis process, not the final report headings. The final report should merge step outputs into reader-friendly narrative sections:
+
+| Analysis Steps | Report Location |
+|----------------|-----------------|
+| Steps 0-2 | Company overview, scope, operating facts, standardized earnings |
+| Steps 3-5.5 | Business model, competition, core variables, base-rate calibration |
+| Steps 6-10 | Forecasts, valuation, scenarios, sensitivity |
+| Steps 11-12 | Reverse check, risks, conclusion, tracking framework |
+
+### Summary Conclusion
+
+Include at least:
+
+- Company name, ticker, current share price
+- Whether the Macro Overlay is enabled
+- 12-month Base target price plus Bull/Bear range
+- Optional probability-weighted target price
+- Conclusion confidence and main uncertainty sources
+- Base-case core forecasts: revenue, net income, EPS/FCF, plus valuation method/parameters
+- Upside/downside versus current share price
+- One-sentence macro path if enabled
+- Valuation logic in 1-2 sentences
+- Largest upside catalyst and largest downside risk
+- 2-3 key tracking indicators
+- Disclaimer
+
+**Summary template** (numbers are placeholders):
 
 ```markdown
-# [股票名称]（[代码]）估值结论
+# [Company Name] ([Ticker]) Valuation Conclusion
 
-> 免责声明：本分析不构成投资建议，仅为基于公开信息的独立估值练习。市场有风险，投资需谨慎。
+> Disclaimer: This analysis is not investment advice. It is an independent valuation exercise based on public information. Markets involve risk; invest with caution.
 
-| 项目 | 数值 |
-|------|------|
-| 当前股价 | ¥XX.XX |
-| 宏观增强模块 | 启用 / 未启用 |
-| **12 个月目标价（基准）** | **¥XX.XX** |
-| 概率加权目标价（可选） | ¥XX.XX |
-| 乐观情景 | ¥XX.XX |
-| 悲观情景 | ¥XX.XX |
-| 基准上行空间 | +XX% |
-| 核心假设 | FY20XXE 营收 XXX 亿元，净利润 XXX 亿元，XX 倍 PE / XX% WACC |
-| 宏观基准路径 | [实际利率回落、库存去化结束、美元走弱] |
-
-**估值逻辑：** [1–2 句话]
-**最大上行催化：** [一句话]
-**最大下行风险：** [一句话]
-**关键跟踪指标：** [2–3 个]
+**Current Share Price:** [Currency] XX.XX; **Macro Overlay:** Enabled / Not enabled
+**12-Month Target Price:** Base [Currency] XX.XX (+XX%); Bull [Currency] XX.XX; Bear [Currency] XX.XX; probability-weighted (optional) [Currency] XX.XX
+**Conclusion Confidence:** High / Medium / Low; **Main Uncertainty:** [1-2 items]
+**Core Assumptions:** FY20XXE revenue XXX, net income XXX, XXx PE / XX% WACC
+**Macro Base Path:** [If enabled, explain in one sentence]
+**Valuation Logic:** [1-2 sentences]
+**Catalyst and Risk:** largest upside catalyst [one sentence]; largest downside risk [one sentence]
+**Key Tracking Indicators:** [2-3 indicators]
 ```
 
-### 分析报告
+### Analysis Report
 
-以叙述段落组织，按板块推进：
+Write the report for human readers, not as a checklist-style output. Use coherent paragraphs that connect facts, assumptions, valuation logic, and risks into a readable investment narrative. Headings are encouraged for navigation.
 
-1. 公司概况与口径说明
-2. 经营事实与历史归因
-3. 标准化盈利
-4. 商业模式与竞争格局（含宏观传导，若启用）
-5. 核心变量与预测
-6. 宏观环境与情景路径（仅启用时）
-7. 估值
-8. 情景与敏感性
-9. 反向校验与风险
-10. 结论与跟踪框架
+Use bullets, numbered lists, and tables only when they materially improve clarity, such as for scenario assumptions, sensitivity results, valuation bridges, or tracking indicators.
 
-**叙述原则**：关键判断的前提、推理链与反证条件在叙述中自然呈现——读者应能看到"从 X 如何推到 Y、哪一跳最脆弱、什么会让它失效"。分析过程中触发过的回退显式记录。板块详略按公司情况调整。
+Organize the narrative around company overview and scope; operating facts and historical attribution; standardized earnings; business model and competitive position; core variables and forecasts; valuation; scenarios and sensitivity; reverse check and risks; and conclusion plus tracking framework.
 
-### 防错清单
+If the Macro Overlay is enabled, integrate macro transmission and scenario paths into the relevant sections rather than adding a mechanical appendix.
 
-1. 订单额、定点金额、意向协议不等于收入；一次性收益不等于长期盈利能力；管理层指引是假设来源，不是事实。
-2. 始终使用完全摊薄股本，不可忽略未来稀释。
-3. 行业叙事不能替代收入、利润率、现金流、股本这四个硬变量。
-4. 当前股价仅用于反向校验，不作估值输入。
-5. 地缘政治落到具体传导路径（需求 / 供给 / 成本 / 汇率 / 风险溢价），不作空泛风险条目。
-6. 概率加权目标价中的概率是工作假设，不得伪精确到小数点。
+**Narrative principle**: key judgments must show their premises, reasoning chain, and falsification conditions naturally in prose. The reader should see how X leads to Y, which step is weakest, and what would invalidate it without piecing the argument together from fragmented bullets. Any rollback triggered during analysis must be disclosed.
+
+Adjust section detail to the company.
+
+**List discipline**: avoid list-heavy writing by default. Do not turn every step, source, assumption, or risk into a bullet list. Use bullets only for compact comparison, multi-item evidence, scenario/sensitivity summaries, or final monitoring checklists.
+
+If a list is used, introduce it with a short explanatory sentence and return to prose afterward.
+
+### Error-Prevention Checklist
+
+Before final output, in addition to Part 1 hard constraints, confirm:
+
+1. Order value, nominated project value, and letters of intent are not revenue; management guidance is an assumption source, not fact.
+2. Industry narrative does not replace the four hard variables: revenue, margin, cash flow, and share count.
+3. Geopolitics is mapped to concrete transmission channels, such as demand, supply, cost, FX, or risk premium, rather than listed as a vague risk.
+4. Evidence gaps, material counter-evidence, and rollback triggers are disclosed in the report.
